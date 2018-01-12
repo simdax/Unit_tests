@@ -3,9 +3,9 @@
 rm -rf ../logs
 mkdir -p ../logs
 
-args=${@:-"l R r a"}
-options=`./powerset $args`
-dirs=(".")
+options="l R r a t"
+options=`./powerset $options`
+dirs=". ~/libft"
 
 echo_infos()
 {
@@ -18,16 +18,21 @@ echo_infos()
 go()
 {
 	echo evaluating : $1 -$3 $4
-	eval "$1 -$3 $4 | cat -e" > ../logs/`echo $3$4`$2
+	eval "$1 -$3 $4 | cat -e" > ../logs/`echo $3`$2
 }
  
 for option in $options
 do
 	for dir in $dirs
 	do
-		echo_infos $option $dir
+#		echo_infos $option $dir
 		go ls logVrai $option $dir
 		go ../ft_ls logMoi $option $dir
-		diff ../logs/`echo $option$dir`logVrai ../logs/`echo $option$dir`logMoi
+		diff ../logs/`echo $option`logVrai ../logs/`echo $option`logMoi
+		if [ $? == 0 ] ; then
+			echo 😀
+		else
+			echo 😡
+		fi
 	done
 done
