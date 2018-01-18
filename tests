@@ -3,7 +3,7 @@
 rm -rf ../logs
 mkdir -p ../logs
 
-options="l R r a t"
+options="l R r a t G"
 options=`./powerset $options`
 dirs=". ~/libft"
 
@@ -18,14 +18,15 @@ echo_infos()
 go()
 {
 	echo evaluating : $1 -$3 $4
-	eval "$1 -$3 $4 | cat -e" > ../logs/`echo $3`$2
+	eval "$1 -1$3 $4" |\
+		sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g"\
+	> ../logs/`echo $3`$2
 }
  
 for option in $options
 do
 	for dir in $dirs
 	do
-#		echo_infos $option $dir
 		go ls logVrai $option $dir
 		go ../ft_ls logMoi $option $dir
 		diff ../logs/`echo $option`logVrai ../logs/`echo $option`logMoi
